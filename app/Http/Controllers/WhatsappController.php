@@ -88,7 +88,7 @@ class WhatsappController extends Controller
 public function template_message($mob,$phoneNoId) {
 
         $response = Http::withHeaders([
-          'Authorization' => 'Bearer EAANFgseGzQsBAEGRQQoaZBZCRZAjzdgQnqFqqpBKYRBMpPoShif6acJanOtDZCgOsb6lmSItV3JB5r1CWEkSARx10NZBI3aOXk0nkwZCUyQY5rdZAG35msyCIgLTO7ZAShU8knVU9TP7oaOXea3ZA1G71Po0BZBkMs0umKcJt5JmDAe5XvpKf8a9PwtMgJZBZBXGQG4nWC9u1QUCzMUHMLlMhkYh',
+          'Authorization' => 'Bearer EAANFgseGzQsBAMTuTjLt7vpsJOUsTiNCsDYHNy5yK00ltfGJ7h8cIBYES9LdZBogcMtzxHtmBLkVcDgjrbxUcuZBxjM0foY3JBQJmDMqygqWIjOybXJGg3HituuXtlGO9di9vFqvy6AZAK0jenWWCzBYVr0EfOq3sVq2hoFUA7991WEPt8XZCFRrVeK50VSOAtk7KkmaSM2cuWvu8yDe',
           'Content-Type' => 'application/json',
         ])
         ->post('https://graph.facebook.com/v16.0/'.$phoneNoId.'/messages', [
@@ -242,7 +242,7 @@ public function webhook(Request $request)
 
         $whatsapp_cloud_api = new WhatsAppCloudApi([
           'from_phone_number_id' => '113342895096982',
-          'access_token' => 'EAANFgseGzQsBAEGRQQoaZBZCRZAjzdgQnqFqqpBKYRBMpPoShif6acJanOtDZCgOsb6lmSItV3JB5r1CWEkSARx10NZBI3aOXk0nkwZCUyQY5rdZAG35msyCIgLTO7ZAShU8knVU9TP7oaOXea3ZA1G71Po0BZBkMs0umKcJt5JmDAe5XvpKf8a9PwtMgJZBZBXGQG4nWC9u1QUCzMUHMLlMhkYh',
+          'access_token' => 'EAANFgseGzQsBAMTuTjLt7vpsJOUsTiNCsDYHNy5yK00ltfGJ7h8cIBYES9LdZBogcMtzxHtmBLkVcDgjrbxUcuZBxjM0foY3JBQJmDMqygqWIjOybXJGg3HituuXtlGO9di9vFqvy6AZAK0jenWWCzBYVr0EfOq3sVq2hoFUA7991WEPt8XZCFRrVeK50VSOAtk7KkmaSM2cuWvu8yDe',
 
       ]);
       // if(isset($data['entry'][0]['changes']['0']['field']) =='messages') {
