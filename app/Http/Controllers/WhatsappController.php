@@ -29,7 +29,7 @@ class WhatsappController extends Controller
  public function help_template_message($mob,$phoneNoId) {
 
       $response = Http::withHeaders([
-        'Authorization' => 'Bearer EAANFgseGzQsBACKyMFQRQxiQ4tjf6kHiUyjikq5WeEFy6orIyRzPf2oubtKmi55NhRJhTojeXZC3ZC9BJbqZBfE0uEmZBCFs4C9fypv9ZA0VVlZAwzm0ZBne85lWLvnzds6sDELZCj0FFW9JZCwA58rP9Ydu0xoriHNstxj5irD4CKWkMrmv2npIKK1ntqVNWxu06mZBNPPAQoj0s01dm3qlzH',
+        'Authorization' => 'Bearer EAANFgseGzQsBAPZBpDQNymAHW7iXpYjM3ofVkZCdIYGlUZBWQ2ZAQucyFVhzm7BaBiHpUwKid3mrMJ9zUgYXD4ruc2HZBMeAhkmBEZBhQ70grtOUmObaKOCcOv4PbFINWXwfar9mtomtEFINPBheRgZCIf7RlSTRm8ZCyxSGbutZAnsvCZBKMmlbW6CgCsIVTMYKZAhXU9DhZC4l1olQ9Y5k9ADK',
         'Content-Type' => 'application/json',
       ])
       ->post('https://graph.facebook.com/v16.0/'.$phoneNoId.'/messages', [
@@ -73,7 +73,7 @@ class WhatsappController extends Controller
 public function template_message($mob,$phoneNoId) {
 
         $response = Http::withHeaders([
-          'Authorization' => 'Bearer EAANFgseGzQsBAE5Sosb6ntFkwUNtprxZC0MDjhiygVNIrkobgpDYptwchank8MAZB5uEqxIyfonSP0vjcbH35jWzT1ZAUCsU2C3FYrcdKWRsqduGd5QHcIZA5KoPagU1ZBpRf4gmrgsOEtrfFTWolvEjCy6DBZC0TFLxETCJabTT3aNYZCrU3fIA00QCgMv82GVFVp9xxJOzhW2E3eFsYei',
+          'Authorization' => 'Bearer EAANFgseGzQsBAPZBpDQNymAHW7iXpYjM3ofVkZCdIYGlUZBWQ2ZAQucyFVhzm7BaBiHpUwKid3mrMJ9zUgYXD4ruc2HZBMeAhkmBEZBhQ70grtOUmObaKOCcOv4PbFINWXwfar9mtomtEFINPBheRgZCIf7RlSTRm8ZCyxSGbutZAnsvCZBKMmlbW6CgCsIVTMYKZAhXU9DhZC4l1olQ9Y5k9ADK',
           'Content-Type' => 'application/json',
         ])
         ->post('https://graph.facebook.com/v16.0/'.$phoneNoId.'/messages', [
@@ -227,7 +227,7 @@ public function webhook(Request $request)
 
         $whatsapp_cloud_api = new WhatsAppCloudApi([
           'from_phone_number_id' => '113342895096982',
-          'access_token' => 'EAANFgseGzQsBAE5Sosb6ntFkwUNtprxZC0MDjhiygVNIrkobgpDYptwchank8MAZB5uEqxIyfonSP0vjcbH35jWzT1ZAUCsU2C3FYrcdKWRsqduGd5QHcIZA5KoPagU1ZBpRf4gmrgsOEtrfFTWolvEjCy6DBZC0TFLxETCJabTT3aNYZCrU3fIA00QCgMv82GVFVp9xxJOzhW2E3eFsYei',
+          'access_token' => 'EAANFgseGzQsBAPZBpDQNymAHW7iXpYjM3ofVkZCdIYGlUZBWQ2ZAQucyFVhzm7BaBiHpUwKid3mrMJ9zUgYXD4ruc2HZBMeAhkmBEZBhQ70grtOUmObaKOCcOv4PbFINWXwfar9mtomtEFINPBheRgZCIf7RlSTRm8ZCyxSGbutZAnsvCZBKMmlbW6CgCsIVTMYKZAhXU9DhZC4l1olQ9Y5k9ADK',
 
       ]);
 
@@ -289,10 +289,9 @@ public function webhook(Request $request)
             $whatsapp_cloud_api->sendTextMessage($mob,$mes);
 
 
-            
+
 
           }
-        
 
         $member = new Member;
         $member->thread_id = '2';
@@ -336,14 +335,22 @@ public function webhook(Request $request)
           \log::info('tickets new');
           \log::info($Membertickets);
 
-          $mes = 'Hi,your previous tickets is '  .$Membertickets;
-          $whatsapp_cloud_api->sendTextMessage($mob,$mes);
+          if(!empty($Membertickets)){
+            $mes = 'Hi,your previous tickets is '  .$Membertickets;
+            $whatsapp_cloud_api->sendTextMessage($mob,$mes);
+
+          }else{
+            $mes = 'Hi,your previous tickets not found';
+            $whatsapp_cloud_api->sendTextMessage($mob,$mes);
+          }
+         
 
         }else if(strtolower($userMessage)=== 'help'){
           $tem = $this->template_message($mob,$get_phone_no_id);
           $whatsapp_cloud_api->sendTextMessage($mob,$tem);
 
         }else{
+
           \log::info('count count s fetchMess');
             $fetchMess = DB::table('messages')->where('from_number','=',$mob)->where('user_message','=','QUERY PRODUCT')->where('message_status','=',1)->first();
 
@@ -354,11 +361,6 @@ public function webhook(Request $request)
 
                         $tem = $this->template_message($mob,$get_phone_no_id);
                         $whatsapp_cloud_api->sendTextMessage($mob,$tem);
-
-                    }else{
-
-                      $tem = $this->template_message($mob,$get_phone_no_id);
-                      $whatsapp_cloud_api->sendTextMessage($mob,$tem);
 
                     }
 
