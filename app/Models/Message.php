@@ -25,6 +25,7 @@ class Message extends Model
         'from_number',
         'message_sent_user',
         'user_message',
-        
+        'message_status',
+        'message_type',
     ];
 }
