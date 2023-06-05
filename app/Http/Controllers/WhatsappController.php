@@ -7,6 +7,7 @@ use Netflie\WhatsAppCloudApi\WebHook;
 use Illuminate\Support\Facades\Http;
 use App\Models\Thread;
 use App\Models\Message;
+use App\Models\Member;
 
 
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
@@ -25,70 +26,54 @@ class WhatsappController extends Controller
     private $fromPhoneNumberId;
     private $accessToken;
 
-    // public function __construct($config)
-    // {
-    //     $this->fromPhoneNumberId = $config['113342895096982'];
-    //     $this->accessToken = $config['EAANFgseGzQsBAMzSysoYDRTBId3oGTrzTcmTNJDLDaZAWIy6GjXoAiDsVREqV5mkBSKyZBNqgZCW5BP2J69rvcP8fPhuCQL63WY0cFvGCVQK6Us0AheuZBcjuFBtPEOer5kho0oGJrTZC50SgRDyCBD1VUdGzxATZA7lIF36cQHVqfkOivZBPsF5TOAsJbPJh04TWvytJAVOGqymWjyZBCZB7'];
-    // }
-     
-//   public function sendWhatsAppTemplateMessage($recipientWaId, $namespace, $templateName, $languageCode, $textString)
-//     {
-//         $url = "https://api.example.com/v1/messages";
+ public function help_template_message($mob,$phoneNoId) {
 
-//         $data = array(
-//             "to" => $recipientWaId,
-//             "type" => "template",
-//             "template" => array(
-//                 "namespace" => $namespace,
-//                 "name" => $templateName,
-//                 "language" => array(
-//                     "code" => $languageCode,
-//                     "policy" => "deterministic"
-//                 ),
-//                 "components" => array(
-//                     array(
-//                         "type" => "body",
-//                         "parameters" => array(
-//                             array(
-//                                 "type" => "text",
-//                                 "text" => $textString
-//                             )
-//                         )
-//                     )
-//                 )
-//             )
-//         );
-
-//         $dataJson = json_encode($data);
-
-//         $ch = curl_init();
-
-//         curl_setopt($ch, CURLOPT_URL, $url);
-//         curl_setopt($ch, CURLOPT_POST, true);
-//         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataJson);
-//         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-//             "Authorization: Bearer $this->accessToken",
-//             "Content-Type: application/json"
-//         ));
-
-//         $response = curl_exec($ch);
-//         \Log::info($response);
-
-//         curl_close($ch);
-
-//         // Handle the response
-//         if ($response === false) {
-//             echo "Error occurred: " . curl_error($ch);
-//         } else {
-//             echo "Response: " . $response;
-//         }
-//  }
+      $response = Http::withHeaders([
+        'Authorization' => 'Bearer EAANFgseGzQsBACKyMFQRQxiQ4tjf6kHiUyjikq5WeEFy6orIyRzPf2oubtKmi55NhRJhTojeXZC3ZC9BJbqZBfE0uEmZBCFs4C9fypv9ZA0VVlZAwzm0ZBne85lWLvnzds6sDELZCj0FFW9JZCwA58rP9Ydu0xoriHNstxj5irD4CKWkMrmv2npIKK1ntqVNWxu06mZBNPPAQoj0s01dm3qlzH',
+        'Content-Type' => 'application/json',
+      ])
+      ->post('https://graph.facebook.com/v16.0/'.$phoneNoId.'/messages', [
+        'messaging_product' => 'whatsapp',
+        'recipient_type' => 'individual',
+        'to' => $mob,
+        'type' => 'interactive',
+        'interactive' => [
+            'type' => 'list',
+            'header' => [
+                'type' => 'text',
+                'text' => 'QUERY HANDLING',
+            ],
+            'body' => [
+                'text' => 'OUR WEBSITE LINK',
+            ],
+            'footer' => [
+                'text' => 'ADDRESS MOHALI 8 PHASE',
+            ],
+            'action' => [
+                'button' => 'CHOOSE OPTIONS',
+                'sections' => [
+                    [
+                        'title' => 'QUERY PRODUCT',
+                        'rows' => [
+                            [
+                                'id' => 'help',
+                                'title' => 'help!',
+                                'description' => 'help',
+                            ],
+                           
+                        ],
+                 ],
+                    
+                ],
+            ],
+        ],
+      ]);
+}
 
 public function template_message($mob,$phoneNoId) {
 
         $response = Http::withHeaders([
-          'Authorization' => 'Bearer EAANFgseGzQsBAMTuTjLt7vpsJOUsTiNCsDYHNy5yK00ltfGJ7h8cIBYES9LdZBogcMtzxHtmBLkVcDgjrbxUcuZBxjM0foY3JBQJmDMqygqWIjOybXJGg3HituuXtlGO9di9vFqvy6AZAK0jenWWCzBYVr0EfOq3sVq2hoFUA7991WEPt8XZCFRrVeK50VSOAtk7KkmaSM2cuWvu8yDe',
+          'Authorization' => 'Bearer EAANFgseGzQsBAE5Sosb6ntFkwUNtprxZC0MDjhiygVNIrkobgpDYptwchank8MAZB5uEqxIyfonSP0vjcbH35jWzT1ZAUCsU2C3FYrcdKWRsqduGd5QHcIZA5KoPagU1ZBpRf4gmrgsOEtrfFTWolvEjCy6DBZC0TFLxETCJabTT3aNYZCrU3fIA00QCgMv82GVFVp9xxJOzhW2E3eFsYei',
           'Content-Type' => 'application/json',
         ])
         ->post('https://graph.facebook.com/v16.0/'.$phoneNoId.'/messages', [
@@ -100,13 +85,13 @@ public function template_message($mob,$phoneNoId) {
               'type' => 'list',
               'header' => [
                   'type' => 'text',
-                  'text' => 'QUERY HANDLING',
+                  'text' => 'MODICARE',
               ],
               'body' => [
-                  'text' => 'OUR WEBSITE LINK',
+                  'text' => 'MODICARE WEBSITE LINK',
               ],
               'footer' => [
-                  'text' => 'ADDRESS MOHALI 8 PHASE',
+                  'text' => 'MODICARE',
               ],
               'action' => [
                   'button' => 'CHOOSE OPTIONS',
@@ -117,17 +102,17 @@ public function template_message($mob,$phoneNoId) {
                               [
                                   'id' => 'QUERY_PRODUCT',
                                   'title' => 'QUERY PRODUCT',
-                                  'description' => 'query handling here!',
+                                  'description' => 'MODICARE PRODUCT',
                               ],
                               [
                                   'id' => 'ABOUT_US',
                                   'title' => 'ABOUT US',
-                                  'description' => 'LINK ABOUT US PAGE',
+                                  'description' => 'MODICARE PRODUCT',
                               ],
                               [
                                 'id' => 'PREVIOUS_QUERY',
                                 'title' => 'PREVIOUS QUERY',
-                                'description' => 'PREVIOUS QUERY',
+                                'description' => 'MODICARE PRODUCT',
                             ],
                           ],
                    ],
@@ -191,9 +176,9 @@ public function get_receipient_id($data) {
 
 public function get_status($data) {
 
-  if (isset($data['entry'][0]['changes'][0]['value']['statuses'])) {
-    return $data['entry'][0]['changes'][0]['value']['statuses'][0]['status'];
-  }
+    if (isset($data["entry"][0]["changes"][0]["value"]["statuses"][0])) {
+        return $data["entry"][0]["changes"][0]["value"]["statuses"][0]["status"];
+    }
 
 }
 
@@ -242,32 +227,34 @@ public function webhook(Request $request)
 
         $whatsapp_cloud_api = new WhatsAppCloudApi([
           'from_phone_number_id' => '113342895096982',
-          'access_token' => 'EAANFgseGzQsBAMTuTjLt7vpsJOUsTiNCsDYHNy5yK00ltfGJ7h8cIBYES9LdZBogcMtzxHtmBLkVcDgjrbxUcuZBxjM0foY3JBQJmDMqygqWIjOybXJGg3HituuXtlGO9di9vFqvy6AZAK0jenWWCzBYVr0EfOq3sVq2hoFUA7991WEPt8XZCFRrVeK50VSOAtk7KkmaSM2cuWvu8yDe',
+          'access_token' => 'EAANFgseGzQsBAE5Sosb6ntFkwUNtprxZC0MDjhiygVNIrkobgpDYptwchank8MAZB5uEqxIyfonSP0vjcbH35jWzT1ZAUCsU2C3FYrcdKWRsqduGd5QHcIZA5KoPagU1ZBpRf4gmrgsOEtrfFTWolvEjCy6DBZC0TFLxETCJabTT3aNYZCrU3fIA00QCgMv82GVFVp9xxJOzhW2E3eFsYei',
 
       ]);
-      // if(isset($data['entry'][0]['changes']['0']['field']) =='messages') {
-
-    // if($data['entry'][0]['changes'][0]['value']['statuses'][0]['status']!= 'delivered') {
-      // if($data['entry'][0]['changes'][0]['value']['statuses'][0]['status']!= 'read') {
-    //     if($data['entry'][0]['changes'][0]['value']['statuses'][0]['status']!= 'sent') {
-
-
 
     if(isset($data['entry'][0]['changes']['0']['field']) == 'message'){
        $data = json_decode($request->getContent(), true);
-      \Log::info($data);
+       \Log::info($data);
 
 
        $mob = $this->get_mobile($data);
-      
+       \Log::info('Mob');
        \Log::info($mob);
 
+
+      //  $status = $this->get_status($data);
+      //  if(isset($status)) {
+
+      //    \Log::info('status NEW latest');
+      //    \Log::info($status);
+      // }
+      
       $userReplyMessage = $this->get_user_reply_message_type($data);
 
       if ($userReplyMessage == "text"){
           $userMessage = $this->get_user_message($data);
           \Log::info($userMessage);
       }
+
       elseif ($userReplyMessage == "interactive"){
        $userMessage = $this->get_user_reply_message($data);
        \Log::info($userMessage);
@@ -282,47 +269,111 @@ public function webhook(Request $request)
 
       $get_account_id = $this->get_account_id($data);
       $get_phone_no_id = $this->get_phone_no_id($data);
-
-
-      $get_status = $this->get_status($data);
-      \Log::info('status 124');
-      \Log::info($get_status);
-
       $recipient_wa_id = $this->get_mobile($data);
 
-
       if ($mob){
+          $user_name = $this->get_name($data);
 
-        $user_name = $this->get_name($data);
 
-        if($userMessage=='PREVIOUS QUERY'){
-          $mes = 'Hi,Welcome in our business page '.$user_name. ' '.'you selected CLOTH';
-          $tem = $this->template_message($mob,$get_phone_no_id);
+
+       if($userMessage =='QUERY PRODUCT'){
+
+          $queryTicket = DB::table('members')->where('mobile_no','=',$mob)->where('query','=','QUERY PRODUCT')->where('status','=',2)->first();
+
+
+          if(!isset($queryTicket)){
+
+            $tick_no  = rand(10,1000000);
+
+            $mes = 'Hi,Welcome in our business page '.$user_name. ' '.'your ticket number is' .$tick_no;
+            $whatsapp_cloud_api->sendTextMessage($mob,$mes);
+
+
+            
+
+          }
+        
+
+        $member = new Member;
+        $member->thread_id = '2';
+        $member->agent_name = 'xyz';
+        $member->mobile_no = $mob;
+
+        $member->name = $user_name ;
+        $member->query = $userMessage;
+        $member->status = 2;
+        $member->ticket_no = $tick_no;
+        $member->message_status = 0;
+        $member->save();
+
+     }else if($userMessage=='ABOUT US'){
+
+          $mes = 'Hi,Welcome in our business page '.$user_name.' '. 'you selected ABOUT US';
           $whatsapp_cloud_api->sendTextMessage($mob,$mes);
 
-        }else if($userMessage=='SHOE'){
-          $mes = 'Hi,Welcome in our business page '.$user_name.' '. 'you selected SHOE';
-          $tem = $this->template_message($mob,$get_phone_no_id);
+
+
+          // $member = new Member;
+          // $member->thread_id = '2';
+          // $member->agent_name = 'xyz';
+          // $member->mobile_no = $mob;
+
+          // $member->name = $user_name ;
+          // $member->query = $userMessage;
+          // $member->status = 2;
+
+          // $member->message_status = 0;
+
+          // $member->save();
+
+        }else if($userMessage=='PREVIOUS QUERY'){
+
+          $Membertickets = DB::table('members')
+          ->where('mobile_no', '=', $mob)
+          ->pluck('ticket_no')
+          ->implode(",\n");
+
+          \log::info('tickets new');
+          \log::info($Membertickets);
+
+          $mes = 'Hi,your previous tickets is '  .$Membertickets;
           $whatsapp_cloud_api->sendTextMessage($mob,$mes);
 
-        }else if($userMessage=='LAPTOP'){
-          $mes = 'Hi,Welcome in our business page '.$user_name. ' '.'you selected LAPTOP';
-          $tem = $this->template_message($mob,$get_phone_no_id);
-          $whatsapp_cloud_api->sendTextMessage($mob,$mes);
-
-        }else if($userMessage=='DESKTOP'){
-          $mes = 'Hi,Welcome in our business page '.$user_name. ' '.'you selected DESKTOP';
-          $tem = $this->template_message($mob,$get_phone_no_id);
-          $whatsapp_cloud_api->sendTextMessage($mob,$mes);
-
-        }
-        else{
+        }else if(strtolower($userMessage)=== 'help'){
           $tem = $this->template_message($mob,$get_phone_no_id);
           $whatsapp_cloud_api->sendTextMessage($mob,$tem);
-        }
+
+        }else{
+          \log::info('count count s fetchMess');
+            $fetchMess = DB::table('messages')->where('from_number','=',$mob)->where('user_message','=','QUERY PRODUCT')->where('message_status','=',1)->first();
+
+                \log::info('count count s fetchMess');
+                \log::info($fetchMess);
+
+                    if (!isset($fetchMess)){
+
+                        $tem = $this->template_message($mob,$get_phone_no_id);
+                        $whatsapp_cloud_api->sendTextMessage($mob,$tem);
+
+                    }else{
+
+                      $tem = $this->template_message($mob,$get_phone_no_id);
+                      $whatsapp_cloud_api->sendTextMessage($mob,$tem);
+
+                    }
+
+            // $aboutUs = DB::table('members')->where('from_number','=',$mob)->where('user_message','=','ABOUT US')->first();
+            // \log::info('about us 000');
+            // \log::info($aboutUs);
+
+            // if ($aboutUs){
 
 
-       try {
+            //  }
+
+       }
+
+  //  try {
 
 
         $thread = new Thread;
@@ -332,25 +383,37 @@ public function webhook(Request $request)
         $thread->wa_id = $mob;
 
         $thread->receipient_id = $mob;
-        $thread->status = $get_status;
-
+        $thread->status = 'sent' ;
+        \log::info('THREAD information');
+        \log::info($thread);
         $thread->save();
 
+        $user = Thread::find($thread->id);
+        $user->status = 'read';
+        $user->save();
+
+        \log::info('update status 99');
+        \log::info($thread->status);
 
         $message = new Message;
         $message->thread_id = $thread->id;
         $message->from_number = $mob;
         $message->message_sent_user = $mes;
         $message->user_message = $userMessage;
+        $message->message_type = $userReplyMessage;
+
+        $message->message_status = '1';
+
         \log::info('messages for what');
         \log::info($message);
     
 
         $message->save();
 
-        }catch (Exception $e) {
-          echo 'Error: ' . $e->getMessage();
-      }
+
+      //   }catch (Exception $e) {
+      //     echo 'Error: ' . $e->getMessage();
+      // }
    }
 
     }
@@ -366,94 +429,6 @@ public function webhook(Request $request)
 
 
 }
-
-
-
-//   private function create_button($button) {
-//       return array(
-//           "type" => "list",
-//           "header" => array("type" => "text", "text" => $button["header"]),
-//           "body" => array("text" => $button["body"]),
-//           "footer" => array("text" => $button["footer"]),
-//           "action" => $button["action"]
-//       );
-//   }
-
-//   public function send_button($button, $recipient_id) {
-//       $data = array(
-//           "messaging_product" => "whatsapp",
-//           "to" => $recipient_id,
-//           "type" => "interactive",
-//           "interactive" => $this->create_button($button)
-//       );
-//       $curl = curl_init($this->url);
-//       curl_setopt($curl, CURLOPT_HTTPHEADER, $this->headers);
-//       curl_setopt($curl, CURLOPT_POST, true);
-//       curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-//       curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-//       $response = curl_exec($curl);
-//       curl_close($curl);
-//       return json_decode($response, true);
-//   }
-
-//   public function send_reply_button($button, $recipient_id) {
-//       $data = array(
-//           "messaging_product" => "whatsapp",
-//           "recipient_type" => "individual",
-//           "to" => $recipient_id,
-//           "type" => "interactive",
-//           "interactive" => $button
-//       );
-//       $curl = curl_init($this->url);
-//       curl_setopt($curl, CURLOPT_HTTPHEADER, $this->headers);
-//       curl_setopt($curl, CURLOPT_POST, true);
-//       curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-//       curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-//       $response = curl_exec($curl);
-//       curl_close($curl);
-//       return json_decode($response, true);
-//   }
-
-
-
-
-
-//  public function send_template($template, $recipient_id, $lang = "en_US") {
-
-//         $data = array(
-//             "messaging_product" => "whatsapp",
-//             "to" => $recipient_id,
-//             "type" => "template",
-//             "template" => array("name" => $template, "language" => array("code" => $lang))
-//         );
-//         $curl = curl_init($this->url);
-//         curl_setopt($curl, CURLOPT_HTTPHEADER, $this->headers);
-//         curl_setopt($curl, CURLOPT_POST, true);
-//         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-//         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-//         $response = curl_exec($curl);
-//         curl_close($curl);
-//         return json_decode($response, true);
-
-
-//  }
-
-
-
-
-// public function webhookMSG(){
-
-//     $whatsapp_cloud_api = new WhatsAppCloudApi([
-//         'from_phone_number_id' => '113342895096982',
-//         'access_token' => 'EAANFgseGzQsBAPaS25jKlZAtQrefOsIfbB3L4IT5Q1BGrVbwyYJ7Ua2xh8HuQfIDfZC7YzOIydDN6uJc6S2ZATvkUsJmdDcAN2v0K26QZAoHE5BojMkANiaOrAwxQgHZAfxC03hmsCLCxKduZBXIMy5JyMwydKMRaQdqV5hh9rG41YvjAhHFVGE1jZCsZBwJA5InhVa59fxnJeM0LFZBYpJKu',
-//     ]);
-
-//    return  $whatsapp_cloud_api->sendTextMessage('+919646404283', 'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es');
-
-// }
-
-
-
 
 
 
